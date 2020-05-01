@@ -5,10 +5,28 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+// use App\User;
 
 class User extends Authenticatable
 {
     use Notifiable;
+
+    public function contacts()
+    {
+        return $this->belongsToMany(User::class, 'contacts_users', 'user_id', 'contact_id');
+    }
+    public function phones()
+    {
+        return $this->hasMany('App\Phone');
+    }
+
+
+    // Same table, self referencing, but change the key order
+    // public function theFriends()
+    // {
+    // return $this->belongsToMany('User', 'friend_user', 'friend_id', 'user_id');
+    // }
+
 
     /**
      * The attributes that are mass assignable.

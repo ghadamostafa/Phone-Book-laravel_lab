@@ -3,23 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Phone;
+use App\User;
 use Auth;
-use App\Http\Requests\PhoneRequest;
 
-class PhoneController extends Controller
+class ContactController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     public function index()
     {
         //
@@ -32,7 +25,7 @@ class PhoneController extends Controller
      */
     public function create()
     {
-        return view('phones/create');
+        return view('contacts/create');
         //
     }
 
@@ -42,18 +35,21 @@ class PhoneController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PhoneRequest $request)
+    public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'phone' => ['required','unique:phones','digits:11','numeric','regex:/^(010|011|012)([1-9]){8}$/u'],
-
-        // ]);
-        // $validated = $request->validated();
-        $phone=new Phone;
-        $phone-> phone = $request -> phone;
-        $phone-> user_id=Auth::id();
-        $phone->save();
-        return redirect()->route('home');
+        // dd($request);
+       $user= User::where('username','=',$request->name)->first();
+       if($user)
+       {
+           $user_id=$user -> id;
+           Auth::user()->contacts()->attach($user_id);
+           return redirect()->route('home')->with('success', 'created successfully');
+       }
+       else
+       {
+            return redirect()->route('home')->with('error', 'error');
+       }
+       
         //
     }
 
@@ -76,8 +72,6 @@ class PhoneController extends Controller
      */
     public function edit($id)
     {
-        $phone=Phone::find($id);
-        return view('phones/edit',['phone' => $phone ]);
         //
     }
 
@@ -88,13 +82,8 @@ class PhoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PhoneRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $phone=Phone::find($id);
-        $phone-> phone = $request -> phone;
-        // $phone-> user_id=Auth::id();
-        $phone->save();
-        return redirect()->route('home');
         //
     }
 
@@ -106,8 +95,8 @@ class PhoneController extends Controller
      */
     public function destroy($id)
     {
-        $phone=Phone::find($id);
-        $phone->delete();    
+        // dd($id);
+        Auth::user()->contacts()->detach($id);
         return redirect()->route('home');
         //
     }

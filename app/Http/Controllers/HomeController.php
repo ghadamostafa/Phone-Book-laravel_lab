@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Phone;
+use Auth;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -25,6 +27,8 @@ class HomeController extends Controller
     public function index()
     {
         $phones=Phone::all();
-        return view('home',['phones' => $phones]);
+        $contacts=Auth::user()->contacts;
+        // dd($contacts);
+        return view('home',['phones' => $phones,'contacts' => $contacts]);
     }
 }
