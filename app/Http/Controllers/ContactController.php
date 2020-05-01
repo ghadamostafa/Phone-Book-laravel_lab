@@ -43,7 +43,7 @@ class ContactController extends Controller
        {
            $user_id=$user -> id;
            Auth::user()->contacts()->attach($user_id);
-           return redirect()->route('home')->with('success', 'created successfully');
+           return redirect()->route('home')->with('success', 'contact added successfully');
        }
        else
        {

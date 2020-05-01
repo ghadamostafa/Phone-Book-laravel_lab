@@ -53,7 +53,11 @@ class PhoneController extends Controller
         $phone-> phone = $request -> phone;
         $phone-> user_id=Auth::id();
         $phone->save();
-        return redirect()->route('home');
+        if($phone -> save())
+        {
+            return redirect()->route('home')->with('success', 'Phone created successfully');
+        }
+        
         //
     }
 

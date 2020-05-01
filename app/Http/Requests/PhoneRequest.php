@@ -25,7 +25,7 @@ class PhoneRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone' => ['required','digits:11','numeric','regex:/(^(010|011|012)([1-9]){8}$)/',
+            'phone' => ['required','digits:11','numeric','regex:/(^(010|011|012)([0-9]){8}$)/',
             Rule::unique('phones')->where(function ($query) {
                 return $query->whereNull('deleted_at');
             })
