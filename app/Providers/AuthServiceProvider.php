@@ -13,6 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
+        Phone::class => PhonePolicy::class,
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
@@ -24,7 +25,16 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        Gate::define('delete-contact', function ($user,$id) {
+            if($user->contacts->find( $id) ) 
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        });
+        
     }
 }

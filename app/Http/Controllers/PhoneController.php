@@ -32,6 +32,7 @@ class PhoneController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Phone::class);
         return view('phones/create');
         //
     }
@@ -78,9 +79,12 @@ class PhoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Phone $phone)
     {
-        $phone=Phone::find($id);
+        // dd($phone);
+        $this->authorize('update', $phone);
+        $phone=Phone::find($phone->id);
+        // dd($phone);
         return view('phones/edit',['phone' => $phone ]);
         //
     }
@@ -92,12 +96,17 @@ class PhoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PhoneRequest $request, $id)
+    public function update(PhoneRequest $request,Phone $phone)
     {
-        $phone=Phone::find($id);
-        $phone-> phone = $request -> phone;
-        // $phone-> user_id=Auth::id();
-        $phone->save();
+        // dd($phone);
+        $this->authorize('update', $phone);
+        
+        $phone=Phone::find($phone->id);
+        // $phone-> phone = $request -> phone;
+        // // $phone-> user_id=Auth::id();
+        // $phone->save();
+        
+        $phone->update($request->all());
         return redirect()->route('home');
         //
     }
@@ -108,9 +117,10 @@ class PhoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Phone $phone)
     {
-        $phone=Phone::find($id);
+        $this->authorize('delete', $phone);
+        $phone=Phone::find($phone->id);
         $phone->delete();    
         return redirect()->route('home');
         //

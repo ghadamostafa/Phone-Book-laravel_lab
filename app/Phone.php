@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Phone extends Model
 {
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'phone'
+    ];
+
     use SoftDeletes;
     public function user()
     {

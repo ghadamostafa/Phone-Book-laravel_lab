@@ -26,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $phones=Phone::all();
+        $phones=Phone::where('user_id', Auth::id())->get();
         $contacts=Auth::user()->contacts;
         // dd($contacts);
         return view('home',['phones' => $phones,'contacts' => $contacts]);

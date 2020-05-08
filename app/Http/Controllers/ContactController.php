@@ -42,6 +42,7 @@ class ContactController extends Controller
        if($user)
        {
            $user_id=$user -> id;
+        //    dd(Auth::user());
            Auth::user()->contacts()->attach($user_id);
            return redirect()->route('home')->with('success', 'contact added successfully');
        }
@@ -96,6 +97,7 @@ class ContactController extends Controller
     public function destroy($id)
     {
         // dd($id);
+        $this->authorize('delete-contact', $id);
         Auth::user()->contacts()->detach($id);
         return redirect()->route('home');
         //
